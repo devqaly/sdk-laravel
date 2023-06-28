@@ -5,8 +5,8 @@ namespace Devqaly\DevqalyLaravel\Middlewares;
 use Closure;
 use Devqaly\DevqalyClient\DevqalyClient;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Log\Events\MessageLogged;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 
 class DevqalyMiddleware
@@ -17,11 +17,11 @@ class DevqalyMiddleware
 
     public function handle($request, Closure $next)
     {
-        if (!$this->shouldRunMiddleware()) {
+        if (! $this->shouldRunMiddleware()) {
             return $next($request);
         }
 
-        if (!$this->hasHeaders($request)) {
+        if (! $this->hasHeaders($request)) {
             return $next($request);
         }
 
@@ -43,32 +43,30 @@ class DevqalyMiddleware
     }
 
     private function registerLogsListener(
-        string        $sessionSecretToken,
-        string        $sessionId,
+        string $sessionSecretToken,
+        string $sessionId,
         DevqalyClient $client
-    ): void
-    {
+    ): void {
         Event::listen(function (MessageLogged $messageLogged) use ($sessionId, $sessionSecretToken, $client) {
             $client->createLogEvent($sessionId, $sessionSecretToken, [
                 'level' => $messageLogged->level,
-                'log' => $messageLogged->message
+                'log' => $messageLogged->message,
             ]);
         });
     }
 
     private function registerDatabaseTransactionListener(
-        string        $sessionSecretToken,
-        string        $sessionId,
+        string $sessionSecretToken,
+        string $sessionId,
         DevqalyClient $client
-    ): void
-    {
+    ): void {
         DB::listen(function (QueryExecuted $query) use ($sessionSecretToken, $sessionId, $client) {
             $sql = $query->sql;
             $bindings = $query->bindings;
             $executionTimeInMilliseconds = $query->time;
 
             foreach ($bindings as $binding) {
-                $value = is_numeric($binding) ? $binding : "'" . $binding . "'";
+                $value = is_numeric($binding) ? $binding : "'".$binding."'";
                 $sql = preg_replace('/\?/', $value, $sql, 1);
             }
 
