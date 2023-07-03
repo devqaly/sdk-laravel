@@ -15,6 +15,8 @@ class DevqalyMiddleware
 
     const SESSION_SECRET_TOKEN_HEADER_NAME = 'x-devqaly-session-secret-token';
 
+    const REQUEST_ID_HEADER_NAME = 'x-devqaly-request-id';
+
     public function handle($request, Closure $next)
     {
         if (!$this->shouldRunMiddleware()) {
@@ -27,16 +29,17 @@ class DevqalyMiddleware
 
         $sessionId = $request->header(self::SESSION_ID_HEADER_NAME);
         $sessionSecretToken = $request->header(self::SESSION_SECRET_TOKEN_HEADER_NAME);
+        $requestId = $request->header(self::REQUEST_ID_HEADER_NAME);
         $client = new DevqalyClient(config('devqaly.api'), config('devqaly.source'));
 
         $eventsToReport = explode(',', config('devqaly.events'));
 
         if (in_array('databaseTransactions', $eventsToReport)) {
-            $this->registerDatabaseTransactionListener($sessionSecretToken, $sessionId, $client);
+            $this->registerDatabaseTransactionListener($sessionSecretToken, $sessionId, $client, $requestId);
         }
 
         if (in_array('logs', $eventsToReport)) {
-            $this->registerLogsListener($sessionSecretToken, $sessionId, $client);
+            $this->registerLogsListener($sessionSecretToken, $sessionId, $client, $requestId);
         }
 
         return $next($request);
@@ -45,13 +48,15 @@ class DevqalyMiddleware
     private function registerLogsListener(
         string        $sessionSecretToken,
         string        $sessionId,
-        DevqalyClient $client
+        DevqalyClient $client,
+        ?string       $requestId
     ): void
     {
-        Event::listen(function (MessageLogged $messageLogged) use ($sessionId, $sessionSecretToken, $client) {
+        Event::listen(function (MessageLogged $messageLogged) use ($sessionId, $sessionSecretToken, $client, $requestId) {
             $client->createLogEvent($sessionId, $sessionSecretToken, [
                 'level' => $messageLogged->level,
-                'log' => $messageLogged->message
+                'log' => $messageLogged->message,
+                'requestId' => $requestId
             ]);
         });
     }
@@ -59,10 +64,11 @@ class DevqalyMiddleware
     private function registerDatabaseTransactionListener(
         string        $sessionSecretToken,
         string        $sessionId,
-        DevqalyClient $client
+        DevqalyClient $client,
+        ?string       $requestId
     ): void
     {
-        DB::listen(function (QueryExecuted $query) use ($sessionSecretToken, $sessionId, $client) {
+        DB::listen(function (QueryExecuted $query) use ($sessionSecretToken, $sessionId, $client, $requestId) {
             $sql = $query->sql;
             $bindings = $query->bindings;
             $executionTimeInMilliseconds = $query->time;
@@ -75,6 +81,7 @@ class DevqalyMiddleware
             $client->createDatabaseEventTransaction($sessionId, $sessionSecretToken, [
                 'sql' => $sql,
                 'executionTimeInMilliseconds' => $executionTimeInMilliseconds,
+                'requestId' => $requestId
             ]);
         });
     }
