@@ -5,8 +5,8 @@ namespace Devqaly\DevqalyLaravel\Middlewares;
 use Closure;
 use Devqaly\DevqalyClient\DevqalyClient;
 use Illuminate\Database\Events\QueryExecuted;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Log\Events\MessageLogged;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 
 class DevqalyMiddleware
@@ -46,42 +46,40 @@ class DevqalyMiddleware
     }
 
     private function registerLogsListener(
-        string        $sessionSecretToken,
-        string        $sessionId,
+        string $sessionSecretToken,
+        string $sessionId,
         DevqalyClient $client,
-        ?string       $requestId
-    ): void
-    {
+        ?string $requestId
+    ): void {
         Event::listen(function (MessageLogged $messageLogged) use ($sessionId, $sessionSecretToken, $client, $requestId) {
             $client->createLogEvent($sessionId, $sessionSecretToken, [
                 'level' => $messageLogged->level,
                 'log' => $messageLogged->message,
-                'requestId' => $requestId
+                'requestId' => $requestId,
             ]);
         });
     }
 
     private function registerDatabaseTransactionListener(
-        string        $sessionSecretToken,
-        string        $sessionId,
+        string $sessionSecretToken,
+        string $sessionId,
         DevqalyClient $client,
-        ?string       $requestId
-    ): void
-    {
+        ?string $requestId
+    ): void {
         DB::listen(function (QueryExecuted $query) use ($sessionSecretToken, $sessionId, $client, $requestId) {
             $sql = $query->sql;
             $bindings = $query->bindings;
             $executionTimeInMilliseconds = $query->time;
 
             foreach ($bindings as $binding) {
-                $value = is_numeric($binding) ? $binding : "'" . $binding . "'";
+                $value = is_numeric($binding) ? $binding : "'".$binding."'";
                 $sql = preg_replace('/\?/', $value, $sql, 1);
             }
 
             $client->createDatabaseEventTransaction($sessionId, $sessionSecretToken, [
                 'sql' => $sql,
                 'executionTimeInMilliseconds' => $executionTimeInMilliseconds,
-                'requestId' => $requestId
+                'requestId' => $requestId,
             ]);
         });
     }
