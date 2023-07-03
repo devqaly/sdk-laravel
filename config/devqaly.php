@@ -49,5 +49,5 @@ return [
     |   logs: report all logs that were created in the request
     |
     */
-    'events' => env('DEVQALY_EVENTS_TO_LOG', 'databaseTransactions,logs')
+    'events' => env('DEVQALY_EVENTS_TO_LOG', 'databaseTransactions,logs'),
 ];

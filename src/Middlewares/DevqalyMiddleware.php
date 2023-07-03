@@ -19,11 +19,11 @@ class DevqalyMiddleware
 
     public function handle($request, Closure $next)
     {
-        if (!$this->shouldRunMiddleware()) {
+        if (! $this->shouldRunMiddleware()) {
             return $next($request);
         }
 
-        if (!$this->hasHeaders($request)) {
+        if (! $this->hasHeaders($request)) {
             return $next($request);
         }
 

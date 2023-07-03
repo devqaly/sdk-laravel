@@ -2,9 +2,9 @@
 
 namespace Devqaly\DevqalyLaravel\Tests;
 
+use Devqaly\DevqalyLaravel\DevqalyLaravelServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Devqaly\DevqalyLaravel\DevqalyLaravelServiceProvider;
 
 class TestCase extends Orchestra
 {
