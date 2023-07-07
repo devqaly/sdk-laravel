@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "devqaly/devqaly-php": "^0.0.5@beta",
+        "devqaly/devqaly-php": "^0.0.6@beta",
         "illuminate/contracts": "^10.0",
         "spatie/laravel-package-tools": "^1.14.0"
     },
