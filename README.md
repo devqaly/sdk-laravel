@@ -26,7 +26,7 @@ composer require devqaly/devqaly-laravel
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="devqaly-laravel-config"
+php artisan vendor:publish --tag="devqaly"
 ```
 
 This is the contents of the published config file:

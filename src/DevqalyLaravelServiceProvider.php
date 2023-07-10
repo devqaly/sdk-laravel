@@ -2,20 +2,14 @@
 
 namespace Devqaly\DevqalyLaravel;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
-class DevqalyLaravelServiceProvider extends PackageServiceProvider
+class DevqalyLaravelServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+    public function boot()
     {
-        /*
-         * This class is a Package Service Provider
-         *
-         * More info: https://github.com/spatie/laravel-package-tools
-         */
-        $package
-            ->name('devqaly')
-            ->hasConfigFile();
+        $this->publishes([
+            __DIR__ . '/../config/devqaly.php' => config_path('devqaly.php'),
+        ], 'devqaly');
     }
 }
