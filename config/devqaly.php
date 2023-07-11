@@ -44,7 +44,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value indicates which events we should keep track when a session is being recorded.
-    | The possible values are databaseTransaction, logs and exceptions.
+    | The possible values are databaseTransaction and logs.
     |   databaseTransaction: report all SQLs that have been performed during the request
     |   logs: report all logs that were created in the request
     |

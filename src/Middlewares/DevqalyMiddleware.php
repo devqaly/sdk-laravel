@@ -87,7 +87,7 @@ class DevqalyMiddleware
     private function shouldRunMiddleware(): bool
     {
         $runAtEnvironments = explode(',', config('devqaly.runAtEnvironments'));
-        $currentEnvironment = config('app.environment');
+        $currentEnvironment = config('app.env');
 
         return in_array($currentEnvironment, $runAtEnvironments);
     }
