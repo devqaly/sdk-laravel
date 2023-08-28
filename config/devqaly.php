@@ -50,4 +50,16 @@ return [
     |
     */
     'events' => env('DEVQALY_EVENTS_TO_LOG', 'databaseTransactions,logs'),
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security token
+    |--------------------------------------------------------------------------
+    |
+    | You should be able to see this value in your project's settings page.
+    | This value will authenticate your backend in Devqaly's backend servers.
+    |
+    */
+    'securityToken' => env('DEVQALY_SECURITY_TOKEN'),
 ];
