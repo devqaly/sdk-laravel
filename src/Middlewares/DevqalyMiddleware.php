@@ -30,7 +30,7 @@ class DevqalyMiddleware
         $sessionId = $request->header(self::SESSION_ID_HEADER_NAME);
         $sessionSecretToken = $request->header(self::SESSION_SECRET_TOKEN_HEADER_NAME);
         $requestId = $request->header(self::REQUEST_ID_HEADER_NAME);
-        $client = new DevqalyClient(config('devqaly.api'), config('devqaly.source'));
+        $client = new DevqalyClient(config('devqaly.api'), config('devqaly.source'), config('devqaly.securityToken'));
 
         $eventsToReport = explode(',', config('devqaly.events'));
 

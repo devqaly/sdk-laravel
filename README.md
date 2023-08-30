@@ -1,19 +1,28 @@
 # Allow your Laravel application to send events while a session is being recorded
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/devqaly/devqaly-laravel.svg?style=flat-square)](https://packagist.org/packages/devqaly/devqaly-laravel)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/devqaly/devqaly-laravel/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/devqaly/devqaly-laravel/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/devqaly/devqaly-laravel/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/devqaly/devqaly-laravel/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/devqaly/devqaly-laravel.svg?style=flat-square)](https://packagist.org/packages/devqaly/devqaly-laravel)
+<div align="center">
+  <a href="https://devqaly.com" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./assets/images/logo.svg">
+    <img src="https://github.com/devqaly/devqaly/raw/master/assets/images/logo.svg" width="280" alt="Logo"/>
+  </picture>
+  </a>
+</div>
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+<h1 align="center">
+You record your screen, while Devqaly records important events for easier and faster debugging
+</h1>
 
-## Support us
+<div align="center">
+The ultimate service allowing your developers or quality assurance engineers to record their screens while Devqaly 
+records important information such as network requests, clicks, console logs, database transactions and many more.
+</div>
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/devqaly-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/devqaly-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+<p align="center">
+    <br />
+    <a href="https://docs.devqaly.com" rel="dofollow"><strong>Explore the docs »</strong></a>
+    <br />
+</p>
 
 ## Installation
 
@@ -81,7 +90,18 @@ return [
     |   logs: report all logs that were created in the request
     |
     */
-    'events' => env('DEVQALY_EVENTS_TO_LOG', 'databaseTransactions,logs')
+    'events' => env('DEVQALY_EVENTS_TO_LOG', 'databaseTransactions,logs'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Security token
+    |--------------------------------------------------------------------------
+    |
+    | You should be able to see this value in your project's settings page.
+    | This value will authenticate your backend in Devqaly's backend servers.
+    |
+    */
+    'securityToken' => env('DEVQALY_SECURITY_TOKEN'),
 ];
 ```
 
@@ -105,10 +125,6 @@ class Kernel extends HttpKernel
 ```bash
 composer test
 ```
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
