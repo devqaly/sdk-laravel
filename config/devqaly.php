@@ -36,7 +36,7 @@ return [
     | for you to add your backend custom URL
     |
     */
-    'api' => env('DEVQALY_API_URL', 'https://api.devqaly.com'),
+    'api' => env('DEVQALY_API_URL', 'https://api.devqaly.com/api'),
 
     /*
     |--------------------------------------------------------------------------
