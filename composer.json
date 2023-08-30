@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "devqaly/devqaly-php": "0.1.0"
+        "devqaly/devqaly-php": "0.1.1"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
