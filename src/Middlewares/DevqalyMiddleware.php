@@ -52,8 +52,14 @@ class DevqalyMiddleware
         ?string $requestId
     ): void {
         Event::listen(function (MessageLogged $messageLogged) use ($sessionId, $sessionSecretToken, $client, $requestId) {
+            $level = $messageLogged->level;
+
+            if ($level === 'info') {
+                $level = 'informational';
+            }
+
             $client->createLogEvent($sessionId, $sessionSecretToken, [
-                'level' => $messageLogged->level,
+                'level' => $level,
                 'log' => $messageLogged->message,
                 'requestId' => $requestId,
             ]);
